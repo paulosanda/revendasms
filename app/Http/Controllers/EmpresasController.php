@@ -8,7 +8,9 @@ use Auth;
 use App\Empresa;
 use App\Disparo;
 use App\Http\Middleware\Psmid\CadEmpresa;
+use App\Http\Middleware\Psmid\Revendaid;
 use App\Estado;
+use App\Cidade;
 
 class EmpresasController extends Controller
 {
@@ -28,6 +30,11 @@ class EmpresasController extends Controller
             return view('admin.cad_empresa', compact('estado'));
         }
         return view('home');
+    }
+    public function getcidades($idEstado) {
+        $cidades = Cidade::where('estado_id',$idEstado)->get();
+        //dd($cidades);
+        return response()->json($cidades);
     }
     
 
@@ -49,8 +56,10 @@ class EmpresasController extends Controller
      */
     public function store(Request $request)
     {
+        $revenda = new Revendaid;
+        $revenda_id = $revenda->revendaid(Auth::user()->empresa_id);
         $cadempresa = new CadEmpresa;
-        $cadempresa->cadempresa($request);
+        $cadempresa->cadempresa($request, $revenda_id);
         return redirect('/empresas');
     }
     
@@ -122,7 +131,11 @@ class EmpresasController extends Controller
     
     public function list()
     {
-        $empresa = Empresa::with('listUser','disparo')->orderBy('nome')->paginate(10);
+        $revenda = new Revendaid;
+        $revenda_id = $revenda->revendaid(Auth::user()->empresa_id);
+        $empresa = Empresa::with('listUser','disparo')
+        ->where('revenda_id',$revenda_id)
+        ->orderBy('nome')->paginate(10);
         //dd($empresa);
         return view('admin.empresas', compact('empresa'));
 

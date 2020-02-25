@@ -16,7 +16,7 @@ class CreateMasterDisparosTable extends Migration
         Schema::create('master_disparos', function (Blueprint $table) {
             //Esta tabela controla o saldo geral da conta de disparos
             $table->bigIncrements('id');
-            $table->integer('saldo_geral');
+            $table->integer('saldo_geral')->nullable();
             $table->timestamps();
         });
     }

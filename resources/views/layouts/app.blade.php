@@ -117,6 +117,11 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{url('/')}}/jquery/jquery.min.js"></script>
+    <script src="{{url('/')}}/jquery-easing/jquery.easing.min.js"></script>
     <script src="{{url('/')}}/js/pp.js"></script>
+        <footer class="py- 4">
+            @yield('footer')
+        </footer>
 </body>
 </html>

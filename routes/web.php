@@ -17,14 +17,16 @@ Route::get('/', function () {
 
 
 Route::post('contato','FormController@enviar');
-
+//Aceite do termo
+Route::post('termoaceite','UserController@aceite');
+// para carregar cidades
+Route::get('get-cidades/{estado_id}', 'EmpresasController@getcidades'); 
 
 //início de pré cadastro
 Route::get('cancela/{email}', 'PreCadController@cancela');
 Route::get('bemvindo/{email}', 'PreCadController@bemvindo');
 Route::post('codigoverifica', 'PreCadController@codigoverifica');
-// para carregar cidades
-Route::get('get-cidades/{estado_id}', 'PreCadController@getcidades')->name('get-cidades'); 
+
 Route::post('precadEmpresa', 'PreCadController@precadempresa');
 Route::post('precaduser','PreCadController@precaduser');
 
@@ -39,23 +41,42 @@ Auth::routes([
 
 
 //Auth::routes();
+//Rotas para usuários ppra
+Route::group(['middleware' => 'check.pprauser'], function () {
+   Route::get('cad_revenda','Ppra\RevendaController@form');
+   Route::post('cad_revenda','Ppra\RevendaController@cadrevenda');
+   Route::post('cad_user_revenda','Ppra\RevendaController@caduser');
+   Route::get('revendas','Ppra\RevendaController@listarevenda');
+   Route::get('revenda/{id}','Ppra\RevendaController@showrevenda');
+   Route::get('edit_revenda/{id}','Ppra\RevendaController@editaform');
+   Route::post('alt_revenda','Ppra\RevendaController@alterarevenda');
+   Route::post('carregamaster','Ppra\RevendaController@carregamaster');
+   Route::get('revenda_user_alt/{id}','Ppra\RevendaUserController@edit');
+   Route::post('revenda_user_alt','Ppra\RevendaUserController@update');
+
+   //Auditoria de erros no envio de sms
+    Route::get('/audita_arquivo','AuditaController@index');
+    Route::post('/audita_arquivo','AuditaController@audita');
+});
 
 //Rotas administrativas
+/**a rota abaixo está aqui apenas para iniciar a pré autenticação necessária, as demais rotas
+ * para ppra devem estar em "Rotas para usuários ppra */ 
+Route::get('pprahome','Ppra\InicialController@index');
+
 Route::group(['middleware' => ['auth', 'check.admin']], function() {
 //pré cadastro
-Route::get('/precad','PreCadController@index');
-Route::post('/precad','PreCadController@precad');
+//Route::get('/precad','PreCadController@index');
+//Route::post('/precad','PreCadController@precad');
     //  Empresas
-Route::get('/adminps','AdminController@index');
+Route::get('/dashsms','AdminController@index');
 Route::get('/cad_empresa','EmpresasController@index');
+
 Route::post('/cad_empresa','EmpresasController@store');
 Route::get('/empresas','EmpresasController@list');
 Route::get('/edit_empresa/{id}','EmpresasController@edit');
 Route::post('/alt_empresa','EmpresasController@update');
-//ver php do servidor
-Route::get('phpinfo',function(){
-    return view('admin.phpinfo');
-});
+
 
 //Rotas de adminstração para SMS
 Route::get('recarga/{id}','AdminDisparoController@edit');
@@ -70,12 +91,7 @@ Route::get('SmsErroAdmin','SmsErroAdminController@index');
 Route::get('empresa_sms_erro/{id}','SmsErroAdminController@show');
 Route::post('SmsErroAdmin','SmsErroAdminController@update');
 
-//Ajusta saldo master de disparos  partir do qual todos são retirados
-Route::post('adminps','AdminController@dispAjSaldo');
 
-//Auditoria de erros no envio de sms
-Route::get('/audita_arquivo','AuditaController@index');
-Route::post('/audita_arquivo','AuditaController@audita');
 
 //  Usuários
 Route::get('/cad_user','UserController@index');

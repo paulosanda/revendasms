@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Empresa;
 use App\Disparo;
 use App\MasterDisparo;
+use App\Http\Middleware\Psmid\DisparosOp;
 
 class AdminDisparoController extends Controller
 {
@@ -93,23 +94,13 @@ class AdminDisparoController extends Controller
 
     public function update(Request $request)
     {
-        //fazendo recarga
-        $conta = Disparo::where('empresa_id',$request->id)->update([
-           'saldo'  => $request->qtidade
-       ]);
-       $empresa = Empresa::with('disparo')->where('id',$request->id)->get();
-
-       //retira saldo_geral em master_disparos
-       //caregando saldo_geral
-       $saldo_geral = MasterDisparo::find(1);
-       $novo_saldo = $saldo_geral->saldo_geral - $request->recarga;
-      
-       
-       //atualiza saldo_geral
-       MasterDisparo::find(1)->update(['saldo_geral' => $novo_saldo]);
-
+       $empresa_id  = $request->id;
+       $novo_saldo_disparo = $request->qtidade;
+       $recarga = $request->recarga;      
+       $alt_saldo = new DisparosOp;
+       $alt_saldo->alteradisparos($empresa_id, $recarga, $novo_saldo_disparo) ;
+       $empresa = Empresa::with('disparo')->where('id',$request->id)->get(); 
        return view('admin.carga_realizada', compact('empresa'));
-       
     }
 
     /**

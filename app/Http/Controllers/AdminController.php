@@ -7,6 +7,8 @@ use App\User;
 use Auth;
 use App\Disparo;
 use App\MasterDisparo;
+use App\Http\Middleware\Psmid\Revendaid;
+use App\Empresa;
 
 class AdminController extends Controller
 {
@@ -21,39 +23,28 @@ class AdminController extends Controller
      */
     public function index()
     {
+        /**
+         * função para interface administrativa geral e de revenda
+         * O bloqueio é feito na rota pelo middleware CheckAdmin 
+         * e também na condição abaixo, porém é preciso carregar a sessão
+         * se a EMPRESA_ID for 1 serão habilitadas as funções administrativas gerais
+         * Senão apenas as funções administrativas de revenda
+         * 
+         */
         if(Auth::user()->is_admin == 1){
-            $saldo_emp = Disparo::all()->sum('saldo');
-            $saldo_geral = MasterDisparo::find(1);
-            return view('admin.home', compact('saldo_emp','saldo_geral'));
+            $revenda = new Revendaid;
+            $revenda_id = $revenda->revendaid(Auth::user()->empresa_id);
+            $saldo_emp = Disparo::where('revenda_id', $revenda_id)->sum('saldo');
+            $saldo_geral = MasterDisparo::where('revenda_id',$revenda_id)->first();
+            //aqui os dados da empresa estão sendo tratados como dados da revenda pois trata-se de interface de revenda
+            $revenda = Empresa::where('id',Auth::user()->empresa_id)->first();
+            return view('admin.home', compact('saldo_emp','saldo_geral','revenda'));
         }
         //soma total de envios dos saldos das empresas clientes
         
         return view('home');
     }
-    /**
-     * Ajusta saldo master de disparos
-     */
-    public function dispAjSaldo(Request $request)
-    {
-        $existe = MasterDisparo::all()->count();
-        if($existe < 1){
-            //Não existe entrada, criar a primeira que será única
-            $cria = new MasterDisparo();
-            $cria->saldo_geral = $request->qtidade;
-            $cria->save();
-        }
-        else{
-            $carrega = MasterDisparo::find(1);
-            //dd($request->qtidade);
-            $novo_saldo = $carrega->saldo_geral + $request->qtidade;
-            //dd($novo_saldo);
-            $atualiza = MasterDisparo::find(1)->update(['saldo_geral' => $novo_saldo]);
-        }
-        $saldo_emp = Disparo::all()->sum('saldo');
-        $saldo_geral = MasterDisparo::find(1);
-        return view('admin.home', compact('saldo_emp','saldo_geral'));
-    }
-
+    
     /**
      * Show the form for creating a new resource.
      *

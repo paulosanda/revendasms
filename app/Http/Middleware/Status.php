@@ -16,7 +16,7 @@ class Status
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->status < 1) 
+        if(Auth::user()->status != 1) 
         return redirect('/home');
 
         return $next($request);

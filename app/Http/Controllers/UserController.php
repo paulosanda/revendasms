@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Empresa;
 use App\User;
+use App\TermoUser;
+use App\Http\Middleware\Psmid\Revendaid;
 
 class UserController extends Controller
 {
@@ -21,7 +23,9 @@ class UserController extends Controller
     public function index()
     {
         if(Auth::user()->is_admin == 1){
-            $empresa = Empresa::all();
+            $revenda = new Revendaid;
+            $revenda_id = $revenda->revendaid(Auth::user()->empresa_id);
+            $empresa = Empresa::where('revenda_id', $revenda_id)->get();
             return view('admin.cad_user', compact('empresa'));
         }
         return view('home');
@@ -56,7 +60,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        echo 'cadastro realizado com sucesso';
+        return redirect()->action('EmpresasController@list');
     }
 
     /**
@@ -103,8 +107,30 @@ class UserController extends Controller
                 'password' => bcrypt($request->password)
             ]);
         }
-        $empresa = Empresa::with('listUser','disparo')->orderBy('nome')->paginate(10);
-        return view('admin.empresas', compact('empresa'));
+        //$empresa = Empresa::with('listUser','disparo')->orderBy('nome')->paginate(10);
+        //return view('admin.empresas', compact('empresa'));
+        return redirect()->action('EmpresasController@list');
+    }
+
+    /**
+     * Aceite do termo
+     */
+    public function aceite(Request $request)
+    {
+        if(Auth::user()->is_admin == 1)
+        {
+            $aceite = new TermoUser();
+            $aceite->user_id    = Auth::user()->id;
+            $aceite->termo_aceitado = $request->termo;
+            $aceite->save();
+            if($aceite)
+            {
+                User::where('id',Auth::user()->id)
+                ->update(['status' => 1]);
+                return view('admin.home');
+            }
+        }
+        
     }
 
     /**
@@ -117,4 +143,5 @@ class UserController extends Controller
     {
         //
     }
+
 }

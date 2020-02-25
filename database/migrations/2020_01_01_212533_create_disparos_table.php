@@ -14,6 +14,7 @@ class CreateDisparosTable extends Migration
     public function up()
     {
         Schema::create('disparos', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->biginteger('empresa_id')->unsigned();
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->integer('saldo')->nullable();

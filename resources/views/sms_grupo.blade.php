@@ -39,7 +39,7 @@ $(document).on("input", "#mensagem", function() {
                             ter a data de nascimento de  seus contatos no cadastro que este grupo será criado automaticamente.<br>
                             Outros grupos que você criar somente serão listados a partir do momento que houver contatos
                             cadastrados neles.</p>
-                            <p class="div-text">Dúvidas? Entre em contato com o suporte: suporte@seo.adm.br</p>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-8 mb-5">

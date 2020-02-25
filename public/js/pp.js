@@ -1,7 +1,7 @@
 //carrega cidades após o estado ter sido escolhido
-$('select[name=estado]').change(function (){
-  //var url =(window.location.host)
-  var idEstado = $(this).val();
+function getcid(){
+  var select = document.getElementById('estado')
+  var idEstado = select.options[select.selectedIndex].value
     $.get('/get-cidades/' +idEstado, function (cidades) {
       $('select[name=cidade]').empty();
       $.each(cidades, function(key,value) {
@@ -9,7 +9,7 @@ $('select[name=estado]').change(function (){
       + value.cidade + '</option>');
         });
     });
-});
+}
 
 
 //função usada em admin_contatos.blade.php para confirmar ação de deletar todos os clientes da base
@@ -33,9 +33,9 @@ function validatePassword(){
     confirm_password.setCustomValidity('');
   }
 }
-
+/*
 password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
 
-
+*/
 

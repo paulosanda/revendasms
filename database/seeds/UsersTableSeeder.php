@@ -16,7 +16,9 @@ class UsersTableSeeder extends Seeder
             'name'      => 'Paulo Sanda',
             'email'     => 'paulosanda@gmail.com',
             'password'  => bcrypt('!!0860ps@20'),
-            'is_admin'  => 1
+            'ppra'      => 1,
+            'is_admin'  => 1,
+            'empresa_id'    =>1
         ]);
     }
 }

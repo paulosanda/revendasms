@@ -39,9 +39,8 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a href="{{url('/')}}/adminps" class="nav-link">Geral</a>
+                            <a href="{{url('/')}}/dashsms" class="nav-link">Geral</a>
                         </li>
-                        
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 Cadastramento <span class="caret"></span>
@@ -49,7 +48,7 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url('/cad_empresa')}}">Nova Empresa</a>
                                 <a class="dropdown-item" href="{{ url('/cad_user')}}">Novo Usuário</a>
-                                <a class="dropdown-item" href="{{ url('/precad')}}">Pré Cadastro</a>
+                               
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -59,7 +58,6 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url('/empresas')}}">Empresas</a>
                                 <a class="dropdown-item" href="{{ url('/recarga_pedidos')}}">Pedidos de recarga</a>
-                                <a class="dropdown-item" href="{{ url('/audita_arquivo')}}">Auditar arquivo de retorno</a>
                                 <a class="dropdown-item" href="{{ url('/SmsErroAdmin')}}">Erros de Envio</a>
                                 
                             </div>
@@ -111,5 +109,10 @@
   <script src="{{url('/')}}/jquery/jquery.min.js"></script>
   <script src="{{url('/')}}/jquery-easing/jquery.easing.min.js"></script>
   <script src="{{url('/')}}/js/pp.js"></script>
+  
+    <footer class="py-5">
+        @yield('footer')
+    </footer>
+
 </body>
 </html>
