@@ -14,15 +14,9 @@ class Sms
     {
         $endpoint = "http://mex10.com/api/shortcode.aspx?";
         $tipo = "send";
-        $usuario = "paulosanda@seo.adm.br";
-        //$this->senha = "&&Ps20Rt25@ai4@!!";
-        $senha = urlencode("&&Ps20Rt25@ai4@!!");
-        /*
-        $endpoint = "http://mex10.com/api/shortcode.aspx?";
-        $tipo = "send";
-        $usuario="paulosanda@seo.adm.br";
-        $senha="&&Ps20Rt25@ai4@!!";
-        $senha=urlencode($senha);*/
+        $usuario = "seu-usuario";
+        $senha = urlencode("seusenha");
+
 
         $smsdados = [
             'endpoint'  => $endpoint,
@@ -36,10 +30,3 @@ class Sms
 }
 
 
-
-
-$endpoint = "http://mex10.com/api/shortcode.aspx?";
-$tipo = "send";
-$usuario="paulosanda@seo.adm.br";
-$senha="&&Ps20Rt25@ai4@!!";
-$senha=urlencode($senha);
